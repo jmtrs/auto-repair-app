@@ -6,8 +6,6 @@ import {
   SimpleGrid,
   Badge,
   Button,
-  Center,
-  VStack,
   useColorModeValue,
 } from "@chakra-ui/react";
 import AddServiceModal from "../molecules/modals/AddServiceModal";
