@@ -67,7 +67,7 @@ const CustomerDetails: React.FC<CustomerDetailsProps> = ({
       p={4}
       boxShadow="md"
       bgColor={bgColor}
-      maxW="400px"
+      maxW="500px"
       w="100%"
     >
       <Heading as="h2" size="lg" mb={2}>

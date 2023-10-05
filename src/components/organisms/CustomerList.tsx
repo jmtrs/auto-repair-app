@@ -19,7 +19,7 @@ const CustomerList: React.FC = () => {
       >
         Customer List
       </Heading>
-      <Box mx={4}>
+      <Box mx={2}>
         <SimpleGrid columns={[1, 2, 3]} spacing={4} width="100%">
           {customerData.map((customer, index) => (
             <CustomerDetails key={index} {...customer} />
