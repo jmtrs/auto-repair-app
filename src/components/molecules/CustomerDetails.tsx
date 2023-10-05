@@ -6,8 +6,11 @@ import {
   SimpleGrid,
   Badge,
   Button,
+  Center,
+  VStack,
+  useColorModeValue,
 } from "@chakra-ui/react";
-import AddServiceModal from "../molecules/modals/AddServiceModal"; // Adjust the path as needed
+import AddServiceModal from "../molecules/modals/AddServiceModal";
 
 interface CustomerDetailsProps {
   firstName: string;
@@ -33,6 +36,8 @@ const CustomerDetails: React.FC<CustomerDetailsProps> = ({
 }) => {
   const [isAddServiceModalOpen, setIsAddServiceModalOpen] = useState(false);
   const [customerServices, setCustomerServices] = useState(services);
+  const bgColor = useColorModeValue("white", "gray.800");
+  const miniCardsColor = useColorModeValue("gray.100", "gray.700");
 
   const handleAddServiceClick = () => {
     setIsAddServiceModalOpen(true);
@@ -55,11 +60,13 @@ const CustomerDetails: React.FC<CustomerDetailsProps> = ({
 
   return (
     <Box
+      display="flex"
+      flexDirection="column"
       borderWidth="1px"
       borderRadius="lg"
       p={4}
       boxShadow="md"
-      bgColor="white"
+      bgColor={bgColor}
       maxW="400px"
       w="100%"
     >
@@ -76,14 +83,19 @@ const CustomerDetails: React.FC<CustomerDetailsProps> = ({
       </Heading>
       <SimpleGrid minChildWidth="120px" spacing="20px">
         {customerServices.map((service, serviceIndex) => (
-          <Box key={serviceIndex} bgColor="gray.100" p={2} borderRadius="md">
+          <Box
+            key={serviceIndex}
+            bgColor={miniCardsColor}
+            p={2}
+            borderRadius="md"
+          >
             <Badge colorScheme="blue" fontSize="sm">
               Code: {service.code}
             </Badge>
-            <Text fontSize="sm" color="gray.600" mt={1}>
+            <Text fontSize="sm" color="gray.500" mt={1}>
               Description: {service.desc}
             </Text>
-            <Text fontSize="sm" color="gray.600" mt={1}>
+            <Text fontSize="sm" color="gray.500" mt={1}>
               Date: {service.date}
             </Text>
             <Text fontSize="sm" fontWeight="bold" mt={1}>
@@ -92,9 +104,11 @@ const CustomerDetails: React.FC<CustomerDetailsProps> = ({
           </Box>
         ))}
       </SimpleGrid>
-      <Button colorScheme="blue" mt={4} onClick={handleAddServiceClick}>
-        Add Service
-      </Button>
+      <Box mt="auto" justifyContent="center" display="flex">
+        <Button colorScheme="blue" onClick={handleAddServiceClick} mt={4}>
+          Add Service
+        </Button>
+      </Box>
       <AddServiceModal
         isOpen={isAddServiceModalOpen}
         onClose={() => setIsAddServiceModalOpen(false)}

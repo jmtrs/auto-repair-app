@@ -31,18 +31,20 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
   onClose,
   onSave,
 }) => {
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     code: 0,
     date: "",
     cost: 0,
     desc: "",
-  });
-  const [isLoading, setIsLoading] = useState(false);
-  const [formErrors, setFormErrors] = useState({
+  };
+  const initialFormErrors = {
     code: "",
     date: "",
     cost: "",
-  });
+  };
+  const [formData, setFormData] = useState(initialFormData);
+  const [isLoading, setIsLoading] = useState(false);
+  const [formErrors, setFormErrors] = useState(initialFormErrors);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -50,21 +52,28 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
   };
 
   const validateForm = () => {
-    const errors: { [key: string]: string } = {};
+    const errors: any = {};
 
     if (formData.code === 0) {
       errors.code = "Code is required";
+    } else {
+      errors.code = "";
     }
 
     if (formData.date === "") {
       errors.date = "Date is required";
+    } else {
+      errors.date = "";
     }
 
     if (formData.cost === 0) {
       errors.cost = "Cost is required";
+    } else {
+      errors.cost = "";
     }
 
-    return Object.keys(errors).length === 0;
+    setFormErrors(errors);
+    return Object.values(errors).every((err) => err === "");
   };
 
   const handleSave = async () => {
@@ -75,71 +84,81 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({
     setIsLoading(true);
     try {
       await onSave(formData);
+      setFormData(initialFormData);
+      setFormErrors(initialFormErrors);
       onClose();
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleClose = () => {
+    setFormData(initialFormData);
+    setFormErrors(initialFormErrors);
+    onClose();
+  };
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="md">
+    <Modal isOpen={isOpen} onClose={handleClose} size="md">
       <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Add New Service</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <FormControl isRequired isInvalid={formErrors.code !== ""}>
-            <FormLabel>Code</FormLabel>
-            <Input
-              type="number"
-              name="code"
-              value={formData.code}
-              onChange={handleInputChange}
-            />
-            <FormErrorMessage>{formErrors.code}</FormErrorMessage>
-          </FormControl>
-          <FormControl mt={4} isRequired isInvalid={formErrors.date !== ""}>
-            <FormLabel>Date</FormLabel>
-            <Input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleInputChange}
-            />
-            <FormErrorMessage>{formErrors.date}</FormErrorMessage>
-          </FormControl>
-          <FormControl mt={4} isRequired isInvalid={formErrors.cost !== ""}>
-            <FormLabel>Cost ($)</FormLabel>
-            <Input
-              type="number"
-              name="cost"
-              value={formData.cost}
-              onChange={handleInputChange}
-            />
-            <FormErrorMessage>{formErrors.cost}</FormErrorMessage>
-          </FormControl>
-          <FormControl mt={4}>
-            <FormLabel>Description</FormLabel>
-            <Input
-              type="text"
-              name="desc"
-              value={formData.desc}
-              onChange={handleInputChange}
-            />
-          </FormControl>
-        </ModalBody>
-        <ModalFooter>
-          <Box mr={3}>
-            <Button
-              colorScheme="blue"
-              onClick={handleSave}
-              isLoading={isLoading}
-            >
-              Save
-            </Button>
-          </Box>
-          <Button onClick={onClose}>Cancel</Button>
-        </ModalFooter>
+      <ModalContent m={4}>
+        <Box>
+          <ModalHeader>Add New Service</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormControl isRequired isInvalid={formErrors.code !== ""}>
+              <FormLabel>Code</FormLabel>
+              <Input
+                type="number"
+                name="code"
+                value={formData.code}
+                onChange={handleInputChange}
+              />
+              <FormErrorMessage>{formErrors.code}</FormErrorMessage>
+            </FormControl>
+            <FormControl mt={4} isRequired isInvalid={formErrors.date !== ""}>
+              <FormLabel>Date</FormLabel>
+              <Input
+                type="date"
+                name="date"
+                value={formData.date}
+                onChange={handleInputChange}
+              />
+              <FormErrorMessage>{formErrors.date}</FormErrorMessage>
+            </FormControl>
+            <FormControl mt={4} isRequired isInvalid={formErrors.cost !== ""}>
+              <FormLabel>Cost ($)</FormLabel>
+              <Input
+                type="number"
+                name="cost"
+                value={formData.cost}
+                onChange={handleInputChange}
+              />
+              <FormErrorMessage>{formErrors.cost}</FormErrorMessage>
+            </FormControl>
+            <FormControl mt={4}>
+              <FormLabel>Description</FormLabel>
+              <Input
+                type="text"
+                name="desc"
+                value={formData.desc}
+                onChange={handleInputChange}
+              />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Box mr={3}>
+              <Button
+                colorScheme="blue"
+                onClick={handleSave}
+                isLoading={isLoading}
+              >
+                Save
+              </Button>
+            </Box>
+            <Button onClick={handleClose}>Cancel</Button>
+          </ModalFooter>
+        </Box>
       </ModalContent>
     </Modal>
   );
