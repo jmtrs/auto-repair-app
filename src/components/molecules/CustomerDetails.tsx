@@ -1,7 +1,13 @@
-// src/components/molecules/CustomerDetails.tsx
-
-import React from "react";
-import { Box, Heading, Text, SimpleGrid, Badge } from "@chakra-ui/react";
+import React, { useState } from "react";
+import {
+  Box,
+  Heading,
+  Text,
+  SimpleGrid,
+  Badge,
+  Button,
+} from "@chakra-ui/react";
+import AddServiceModal from "../molecules/modals/AddServiceModal"; // Adjust the path as needed
 
 interface CustomerDetailsProps {
   firstName: string;
@@ -25,6 +31,28 @@ const CustomerDetails: React.FC<CustomerDetailsProps> = ({
   model,
   services,
 }) => {
+  const [isAddServiceModalOpen, setIsAddServiceModalOpen] = useState(false);
+  const [customerServices, setCustomerServices] = useState(services);
+
+  const handleAddServiceClick = () => {
+    setIsAddServiceModalOpen(true);
+  };
+
+  const handleSaveService = async (values: {
+    code: number;
+    date: string;
+    cost: number;
+    desc: string;
+  }) => {
+    try {
+      await promiseDelay(3000);
+      const newService = { ...values };
+      setCustomerServices([...customerServices, newService]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Box
       borderWidth="1px"
@@ -47,7 +75,7 @@ const CustomerDetails: React.FC<CustomerDetailsProps> = ({
         Services:
       </Heading>
       <SimpleGrid minChildWidth="120px" spacing="20px">
-        {services.map((service, serviceIndex) => (
+        {customerServices.map((service, serviceIndex) => (
           <Box key={serviceIndex} bgColor="gray.100" p={2} borderRadius="md">
             <Badge colorScheme="blue" fontSize="sm">
               Code: {service.code}
@@ -64,8 +92,19 @@ const CustomerDetails: React.FC<CustomerDetailsProps> = ({
           </Box>
         ))}
       </SimpleGrid>
+      <Button colorScheme="blue" mt={4} onClick={handleAddServiceClick}>
+        Add Service
+      </Button>
+      <AddServiceModal
+        isOpen={isAddServiceModalOpen}
+        onClose={() => setIsAddServiceModalOpen(false)}
+        onSave={handleSaveService}
+      />
     </Box>
   );
 };
 
 export default CustomerDetails;
+
+const promiseDelay = (ms: number): Promise<NodeJS.Timeout> =>
+  new Promise((resolve) => setTimeout(resolve, ms));

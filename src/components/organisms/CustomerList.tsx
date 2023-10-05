@@ -9,11 +9,13 @@ const CustomerList: React.FC = () => {
       <Heading as="h1" size="xl" mb={5}>
         Customer List
       </Heading>
-      <SimpleGrid columns={[1, 2, 3]} spacing={4} width="100%">
-        {customerData.map((customer, index) => (
-          <CustomerDetails key={index} {...customer} />
-        ))}
-      </SimpleGrid>
+      <Box mx={4}>
+        <SimpleGrid columns={[1, 2, 3]} spacing={4} width="100%">
+          {customerData.map((customer, index) => (
+            <CustomerDetails key={index} {...customer} />
+          ))}
+        </SimpleGrid>
+      </Box>
     </Container>
   );
 };

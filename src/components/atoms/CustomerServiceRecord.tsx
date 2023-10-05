@@ -1,5 +1,3 @@
-// src/components/atoms/CustomerServiceRecord.tsx
-
 import React from "react";
 import { Badge, Box, Text } from "@chakra-ui/react";
 
@@ -28,15 +26,9 @@ const CustomerServiceRecord: React.FC<CustomerServiceRecordProps> = ({
       <Badge colorScheme="blue" fontSize="sm">
         Service Code: {code}
       </Badge>
-      <Text fontSize="sm">
-        Description: {desc}
-      </Text>
-      <Text fontSize="sm">
-        Date: {date}
-      </Text>
-      <Text fontSize="sm">
-        Cost: ${cost}
-      </Text>
+      <Text fontSize="sm">Description: {desc}</Text>
+      <Text fontSize="sm">Date: {date}</Text>
+      <Text fontSize="sm">Cost: ${cost}</Text>
     </Box>
   );
 };
